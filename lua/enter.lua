@@ -45,6 +45,12 @@ if num_processing >= concurrency then
         log(ERR, 'cannot pop waiting')
         exit(SERVER_ERROR)
     end
+
+    num_waiting, err = redis:decr('num_waiting')
+    if err then
+        log(ERR, 'cannot decrement number of waiting requests')
+        exit(SERVER_ERROR)
+    end
 end
 
 num_processing, err = redis:incr('num_processing')
